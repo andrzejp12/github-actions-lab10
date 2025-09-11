@@ -1,0 +1,35 @@
+name: Terraform Test Deploy
+
+on:
+  workflow_dispatch:
+
+
+jobs:
+  plan:
+    name: Terraform Plan (Test)
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+
+      - name: Terraform Init
+        run: echo "plan"
+
+  wait-for-approval:
+    name: Wait for Approval
+    needs: plan
+    runs-on: ubuntu-latest
+    environment:
+      name: test
+      # Wymagane zatwierdzenie w środowisku "test"
+    steps:
+      - name: Approval step
+        run: echo "Approved for apply"
+
+  apply:
+    name: Terraform Apply (Test)
+    needs: wait-for-approval
+    runs-on: ubuntu-latest
+    environment: test
+    steps:
+      - name: Terraform Init
+        run: echo "apply"
